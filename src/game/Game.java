@@ -5,6 +5,7 @@ import java.util.*;
 public class Game {
     String userName;
     boolean pauseGame = false;
+    boolean restartGame = false;
     int count = 1;
     int tryToGuess = 0;
     int maxNumber;
@@ -16,70 +17,88 @@ public class Game {
     public void startGame() {
         setNumber();
         while (true) {
-            if (!pauseGame) {
-                setRandomNumber();
-                if (count > 1) {
-                    System.out.println("Еще раз? Да/Нет/Пауза? - ");
-                    input.nextLine();
-                } else {
-                    System.out.println("Играем? Да/Нет/Пауза? - ");
-                    input.nextLine();
-                }
-                String answer = input.nextLine();
-                if (answer.equalsIgnoreCase("Да") && count == 1) {
-                    System.out.print("Введи никнейм -  ");
-                    userName = input.nextLine();
-                    guessNumber();
-                } else if (answer.equalsIgnoreCase("Да") && count > 1) {
-                    System.out.print("Хочешь сменить никнейм? Да/Нет? -  ");
-                    String changeNickName = input.nextLine();
-                    count = 1;
-                    if (changeNickName.equalsIgnoreCase("Да")) {
-                        System.out.print("Введи новый никнейм -  ");
-                        userName = input.nextLine();
-                    } else if (changeNickName.equalsIgnoreCase("Нет")) {
-                        System.out.println("Никнейм не изменен");
+            if (!restartGame) {
+                if (!pauseGame) {
+                    setRandomNumber();
+                    if (count > 1) {
+                        System.out.println("Еще раз? Да/Нет/Пауза? Или рестарт игры? - ");
+                        input.nextLine();
+                    } else {
+                        System.out.println("Играем? Да/Нет/Пауза? - ");
+                        input.nextLine();
                     }
-                    guessNumber();
-                } else if (answer.equalsIgnoreCase("Нет")) {
-                    System.out.println("Показать статистику игр? Да/Нет?");
-                    String showScore = input.nextLine();
-                    if (showScore.equalsIgnoreCase("да")) {
-                        getStatistics();
+                    String answer = input.nextLine();
+                    if (answer.equalsIgnoreCase("Да") && count == 1) {
+                        System.out.print("Введи никнейм -  ");
+                        userName = input.nextLine();
+                        guessNumber();
+                    } else if (answer.equalsIgnoreCase("Да") && count > 1) {
+                        System.out.print("Хочешь сменить никнейм? Да/Нет? -  ");
+                        String changeNickName = input.nextLine();
+                        count = 1;
+                        if (changeNickName.equalsIgnoreCase("Да")) {
+                            System.out.print("Введи новый никнейм -  ");
+                            userName = input.nextLine();
+                        } else if (changeNickName.equalsIgnoreCase("Нет")) {
+                            System.out.println("Никнейм не изменен");
+                        }
+                        guessNumber();
+                    } else if (answer.equalsIgnoreCase("Нет")) {
+                        System.out.println("Показать статистику игр? Да/Нет?");
+                        String showScore = input.nextLine();
+                        if (showScore.equalsIgnoreCase("да")) {
+                            getStatistics();
+                            System.out.println("Спасибо за игру, удачи!");
+                            break;
+                        } else if (showScore.equalsIgnoreCase("нет")) {
+                            System.out.println("Хорошо, удачи!");
+                            break;
+                        }
+                    } else if (answer.equalsIgnoreCase("Пауза")) {
+                        setPauseGame();
+                    } else if (answer.equalsIgnoreCase("Рестарт")) {
+                        setRestartGame();
+                    }
+                } else {
+                    System.out.println("Игра на паузе! Возообновить? Да/Нет");
+                    String resumeGame = input.nextLine();
+                    if (resumeGame.equalsIgnoreCase("Да")) {
+                        setResumeGame();
+                    } else if (resumeGame.equalsIgnoreCase("Нет")) {
                         System.out.println("Спасибо за игру, удачи!");
                         break;
-                    } else if (showScore.equalsIgnoreCase("нет")) {
-                        System.out.println("Хорошо, удачи!");
-                        break;
                     }
-                } else if (answer.equalsIgnoreCase("Пауза")) {
-                    setPauseGame ();
                 }
-            }else {
-                System.out.println("Игра на паузе! Возообновить? Да/Нет");
-                String resumeGame = input.nextLine();
-                if (resumeGame.equalsIgnoreCase("Да")){
-                    setResumeGame();
-                }else if(resumeGame.equalsIgnoreCase("Нет")) {
-                    System.out.println("Спасибо за игру, удачи!");
-                    break;
-                }
+            } else {
+                restartGame = false;
+                startGame();
             }
         }
     }
 
     public void getStatistics() {
-        System.out.println("Статистика игры:");
-        for(String i:score) {
-            System.out.println(i);
+        if (score.isEmpty()) {
+            System.out.println("Пока тут пусто!");
+        } else {
+            System.out.println("Статистика игры:");
+            for (String i : score) {
+                System.out.println(i);
+            }
         }
     }
 
-    public void setPauseGame () {
+
+    public void setRestartGame() {
+        restartGame = true;
+        count = 1;
+        tryToGuess = 0;
+        score.clear();
+    }
+    public void setPauseGame() {
         pauseGame = true;
     }
 
-    public void setResumeGame () {
+    public void setResumeGame() {
         pauseGame = false;
     }
 
