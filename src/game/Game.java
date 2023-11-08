@@ -4,10 +4,11 @@ import java.util.*;
 
 public class Game {
     String userName;
+    boolean pauseGame = false;
     int count = 1;
     int tryToGuess = 0;
-    int randomNumber;
     int maxNumber;
+    int randomNumber;
     List<String> score = new ArrayList<>();
     Scanner input = new Scanner(System.in);
 
@@ -15,41 +16,19 @@ public class Game {
     public void startGame() {
         setNumber();
         while (true) {
-            randomNumber = (int) (Math.random() * maxNumber);
+            setRandomNumber();
             if (count > 1) {
-                System.out.print("Еще раз? Да/Нет? - ");
+                System.out.print("Еще раз? Да/Нет/Пауза? - ");
                 input.nextLine();
             } else {
-                System.out.print("Да/Нет? - ");
+                System.out.print("Да/Нет/Пауза? - ");
                 input.nextLine();
             }
             String answer = input.nextLine();
             if (answer.equalsIgnoreCase("ДА") && count == 1) {
                 System.out.print("Введи никнейм -  ");
                 userName = input.nextLine();
-                System.out.println("Введи любое число от 0 до " + maxNumber);
-                while (true) {
-                    try {
-                        int number = input.nextInt();
-                        if (number < randomNumber) {
-                            System.out.println("Слишком мало!");
-                            count++;
-                        } else if (number > randomNumber) {
-                            System.out.println("Слишком много!");
-                            count++;
-                        } else {
-                            System.out.println("Правильно!");
-                            System.out.println(userName + " угадал число c " + count + " раза!");
-                            tryToGuess = tryToGuess + 1;
-                            addStatistics();
-                            count++;
-                            break;
-                        }
-                    } catch (InputMismatchException e) {
-                        System.out.println("Введите корректное число!");
-                        input.next();
-                    }
-                }
+                guessNumber();
             } else if (answer.equalsIgnoreCase("ДА") && count > 1) {
                 System.out.print("Хочешь сменить никнейм? Да/Нет? -  ");
                 String changeNickName = input.nextLine();
@@ -57,32 +36,10 @@ public class Game {
                 if (changeNickName.equalsIgnoreCase("Да")) {
                     System.out.print("Введи новый никнейм -  ");
                     userName = input.nextLine();
-                    System.out.println("Введи любое число от 0 до " + maxNumber);
-                } else {
-                    System.out.println("Введи любое число от 0 до " + maxNumber);
+                }else if (changeNickName.equalsIgnoreCase("Нет")) {
+                    System.out.println("Никнейм не изменен");
                 }
-                while (true) {
-                    try {
-                        int number = input.nextInt();
-                        if (number < randomNumber) {
-                            System.out.println("Слишком мало!");
-                            count++;
-                        } else if (number > randomNumber) {
-                            System.out.println("Слишком много!");
-                            count++;
-                        } else {
-                            System.out.println("Правильно!");
-                            System.out.println(userName + " угадал число c " + count + " раза!");
-                            tryToGuess = tryToGuess + 1;
-                            addStatistics();
-                            count++;
-                            break;
-                        }
-                    } catch (InputMismatchException e) {
-                        System.out.println("Введите корректное число!");
-                        input.next();
-                    }
-                }
+                guessNumber();
             } else if (answer.equalsIgnoreCase("НЕТ")) {
                 System.out.println("Показать статистику игр? Да/Нет?");
                 String showScore = input.nextLine();
@@ -107,15 +64,45 @@ public class Game {
         }
     }
 
+    private void guessNumber() {
+        System.out.println("Введи любое число от 0 до " + maxNumber);
+        while (true) {
+            try {
+                int number = input.nextInt();
+                if (number < randomNumber) {
+                    System.out.println("Слишком мало!");
+                    count++;
+                } else if (number > randomNumber) {
+                    System.out.println("Слишком много!");
+                    count++;
+                } else {
+                    System.out.println("Правильно!");
+                    System.out.println(userName + " угадал число c " + count + " раза!");
+                    tryToGuess = tryToGuess + 1;
+                    addStatistics();
+                    count++;
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Введите корректное число!");
+                input.next();
+            }
+        }
+    }
+
     private void addStatistics() {
-        this.score.add("Попытка №" + tryToGuess + ":" + "Пользователь"  + "[" + userName + "]" + ":" + "Угадал цифру" + "[" + maxNumber + "]" + " c " + count + " раз(а);");
+        this.score.add("Попытка №" + tryToGuess + ":" + "Пользователь"  + "[" + userName + "]" + ":" + "Угадал цифру" + "[" + randomNumber + "]" + " c " + count + " раз(а);");
+    }
+
+    private void setRandomNumber() {
+        randomNumber = (int) (Math.random() * maxNumber);
     }
 
     private void setNumber() {
+        System.out.println("Привет! Это игра угадай число! Введи максимальное число которое я могу загадать:");
         while (true) {
             try {
-                System.out.println("Привет! Это игра угадай число! Введи максимальное число которое я могу загадать:");
-                maxNumber = input.nextInt();
+                this.maxNumber = input.nextInt();
                 System.out.println("Загадываю......");
                 break;
             } catch (InputMismatchException i) {
