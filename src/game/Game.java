@@ -16,45 +16,56 @@ public class Game {
     public void startGame() {
         setNumber();
         while (true) {
-            setRandomNumber();
-            if (count > 1) {
-                System.out.print("Еще раз? Да/Нет/Пауза? - ");
-                input.nextLine();
-            } else {
-                System.out.print("Да/Нет/Пауза? - ");
-                input.nextLine();
-            }
-            String answer = input.nextLine();
-            if (answer.equalsIgnoreCase("ДА") && count == 1) {
-                System.out.print("Введи никнейм -  ");
-                userName = input.nextLine();
-                guessNumber();
-            } else if (answer.equalsIgnoreCase("ДА") && count > 1) {
-                System.out.print("Хочешь сменить никнейм? Да/Нет? -  ");
-                String changeNickName = input.nextLine();
-                count = 1;
-                if (changeNickName.equalsIgnoreCase("Да")) {
-                    System.out.print("Введи новый никнейм -  ");
-                    userName = input.nextLine();
-                }else if (changeNickName.equalsIgnoreCase("Нет")) {
-                    System.out.println("Никнейм не изменен");
+            if (!pauseGame) {
+                setRandomNumber();
+                if (count > 1) {
+                    System.out.println("Еще раз? Да/Нет/Пауза? - ");
+                    input.nextLine();
+                } else {
+                    System.out.println("Играем? Да/Нет/Пауза? - ");
+                    input.nextLine();
                 }
-                guessNumber();
-            } else if (answer.equalsIgnoreCase("НЕТ")) {
-                System.out.println("Показать статистику игр? Да/Нет?");
-                String showScore = input.nextLine();
-                if (showScore.equalsIgnoreCase("да")) {
-                    getStatistics();
+                String answer = input.nextLine();
+                if (answer.equalsIgnoreCase("Да") && count == 1) {
+                    System.out.print("Введи никнейм -  ");
+                    userName = input.nextLine();
+                    guessNumber();
+                } else if (answer.equalsIgnoreCase("Да") && count > 1) {
+                    System.out.print("Хочешь сменить никнейм? Да/Нет? -  ");
+                    String changeNickName = input.nextLine();
+                    count = 1;
+                    if (changeNickName.equalsIgnoreCase("Да")) {
+                        System.out.print("Введи новый никнейм -  ");
+                        userName = input.nextLine();
+                    } else if (changeNickName.equalsIgnoreCase("Нет")) {
+                        System.out.println("Никнейм не изменен");
+                    }
+                    guessNumber();
+                } else if (answer.equalsIgnoreCase("Нет")) {
+                    System.out.println("Показать статистику игр? Да/Нет?");
+                    String showScore = input.nextLine();
+                    if (showScore.equalsIgnoreCase("да")) {
+                        getStatistics();
+                        System.out.println("Спасибо за игру, удачи!");
+                        break;
+                    } else if (showScore.equalsIgnoreCase("нет")) {
+                        System.out.println("Хорошо, удачи!");
+                        break;
+                    }
+                } else if (answer.equalsIgnoreCase("Пауза")) {
+                    setPauseGame ();
+                }
+            }else {
+                System.out.println("Игра на паузе! Возообновить? Да/Нет");
+                String resumeGame = input.nextLine();
+                if (resumeGame.equalsIgnoreCase("Да")){
+                    setResumeGame();
+                }else if(resumeGame.equalsIgnoreCase("Нет")) {
                     System.out.println("Спасибо за игру, удачи!");
-                    break;
-                } else if (showScore.equalsIgnoreCase("нет")) {
-                    System.out.println("Хорошо, удачи!");
                     break;
                 }
             }
         }
-
-
     }
 
     public void getStatistics() {
@@ -62,6 +73,14 @@ public class Game {
         for(String i:score) {
             System.out.println(i);
         }
+    }
+
+    public void setPauseGame () {
+        pauseGame = true;
+    }
+
+    public void setResumeGame () {
+        pauseGame = false;
     }
 
     private void guessNumber() {
@@ -91,7 +110,7 @@ public class Game {
     }
 
     private void addStatistics() {
-        this.score.add("Попытка №" + tryToGuess + ":" + "Пользователь"  + "[" + userName + "]" + ":" + "Угадал цифру" + "[" + randomNumber + "]" + " c " + count + " раз(а);");
+        score.add("Попытка №" + tryToGuess + ":" + "Пользователь"  + "[" + userName + "]" + ":" + "Угадал цифру" + "[" + randomNumber + "]" + " c " + count + " раз(а);");
     }
 
     private void setRandomNumber() {
@@ -102,15 +121,14 @@ public class Game {
         System.out.println("Привет! Это игра угадай число! Введи максимальное число которое я могу загадать:");
         while (true) {
             try {
-                this.maxNumber = input.nextInt();
-                System.out.println("Загадываю......");
+                maxNumber = input.nextInt();
+                System.out.println("Загадываю......Попробуешь угадать?");
                 break;
             } catch (InputMismatchException i) {
                 System.out.println("Введите корректное число!");
                 input.next();
             }
         }
-        System.out.println("Попробуешь угадать?");
     }
 
 
