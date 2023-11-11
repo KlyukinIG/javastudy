@@ -3,15 +3,15 @@ package game;
 import java.util.*;
 
 public class Game {
-    String userName;
-    boolean pauseGame = false;
-    boolean restartGame = false;
-    int count = 1;
-    int tryToGuess = 0;
-    int maxNumber;
-    int randomNumber;
-    List<String> score = new ArrayList<>();
-    Scanner input = new Scanner(System.in);
+    private String userName;
+    private boolean pauseGame = false;
+    private boolean restartGame = false;
+    private int count = 1;
+    private int tryToGuess = 0;
+    private int maxNumber;
+    private int randomNumber;
+    private List<String> score = new ArrayList<>();
+    private Scanner input = new Scanner(System.in);
 
 
     public void startGame() {
