@@ -133,14 +133,27 @@ public class Game {
     }
 
     private void setRandomNumber() {
-        randomNumber = (int) (Math.random() * maxNumber);
+        randomNumber = (int) (Math.random() * (maxNumber + 1));
     }
 
     private void setNumber() {
         System.out.println("Привет! Это игра угадай число! Введи максимальное число которое я могу загадать:");
         while (true) {
             try {
-                maxNumber = input.nextInt();
+                while (true) {
+                    maxNumber = input.nextInt();
+                    if (maxNumber > 0){
+                        input.nextLine();
+                        break;
+                    } else if (maxNumber < 0){
+                        System.out.println("Число не может быть отрицательным!");
+                        input.nextLine();
+                    }
+                    else if (maxNumber == 0){
+                        System.out.println("Слишком просто! Хитрец :)");
+                        input.nextLine();
+                    }
+                }
                 System.out.println("Загадываю......Попробуешь угадать?");
                 break;
             } catch (InputMismatchException i) {
