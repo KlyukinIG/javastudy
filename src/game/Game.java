@@ -3,15 +3,15 @@ package game;
 import java.util.*;
 
 public class Game {
-    String userName;
-    boolean pauseGame = false;
-    boolean restartGame = false;
-    int count = 1;
-    int tryToGuess = 0;
-    int maxNumber;
-    int randomNumber;
-    List<String> score = new ArrayList<>();
-    Scanner input = new Scanner(System.in);
+    private String userName;
+    private boolean pauseGame = false;
+    private boolean restartGame = false;
+    private int count = 1;
+    private int tryToGuess = 0;
+    private int maxNumber;
+    private int randomNumber;
+    private List<String> score = new ArrayList<>();
+    private Scanner input = new Scanner(System.in);
 
 
     public void startGame() {
@@ -133,14 +133,27 @@ public class Game {
     }
 
     private void setRandomNumber() {
-        randomNumber = (int) (Math.random() * maxNumber);
+        randomNumber = (int) (Math.random() * (maxNumber + 1));
     }
 
     private void setNumber() {
         System.out.println("Привет! Это игра угадай число! Введи максимальное число которое я могу загадать:");
         while (true) {
             try {
-                maxNumber = input.nextInt();
+                while (true) {
+                    maxNumber = input.nextInt();
+                    if (maxNumber > 0){
+                        input.nextLine();
+                        break;
+                    } else if (maxNumber < 0){
+                        System.out.println("Число не может быть отрицательным!");
+                        input.nextLine();
+                    }
+                    else if (maxNumber == 0){
+                        System.out.println("Слишком просто! Хитрец :)");
+                        input.nextLine();
+                    }
+                }
                 System.out.println("Загадываю......Попробуешь угадать?");
                 break;
             } catch (InputMismatchException i) {
