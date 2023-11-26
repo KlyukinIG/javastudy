@@ -1,24 +1,24 @@
 package game;
 
-import java.util.*;
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
 
 public class Game {
     private String userName;
-    private boolean pauseGame = false;
-    private boolean restartGame = false;
     private int count = 1;
     private int tryToGuess = 0;
     private int maxNumber;
     private int randomNumber;
-    private List<String> score = new ArrayList<>();
     private Scanner input = new Scanner(System.in);
-
+    private GameState gameState = GameState.IS_RUNNING ;
+    private PlayerStatistics playerStatistics = new PlayerStatistics();
 
     public void startGame() {
         setNumber();
-        while (true) {
-            if (!restartGame) {
-                if (!pauseGame) {
+        while (GameState.IS_RUNNING == gameState) {
+            if (GameState.RESTART != gameState) {
+                if (GameState.PAUSED != gameState) {
                     setRandomNumber();
                     if (count > 1) {
                         System.out.println("Еще раз? Да/Нет/Пауза? Или рестарт игры? - ");
@@ -47,7 +47,7 @@ public class Game {
                         System.out.println("Показать статистику игр? Да/Нет?");
                         String showScore = input.nextLine();
                         if (showScore.equalsIgnoreCase("да")) {
-                            getStatistics();
+                            playerStatistics.printStatistics();
                             System.out.println("Спасибо за игру, удачи!");
                             break;
                         } else if (showScore.equalsIgnoreCase("нет")) {
@@ -70,39 +70,26 @@ public class Game {
                     }
                 }
             } else {
-                restartGame = false;
                 startGame();
             }
         }
     }
 
-    public void getStatistics() {
-        if (score.isEmpty()) {
-            System.out.println("Пока тут пусто!");
-        } else {
-            System.out.println("Статистика игры:");
-            for (String i : score) {
-                System.out.println(i);
-            }
-        }
-    }
-
-
     public void setRestartGame() {
-        restartGame = true;
+        gameState = GameState.RESTART;
         count = 1;
         tryToGuess = 0;
-        score.clear();
     }
+
     public void setPauseGame() {
-        pauseGame = true;
+        gameState = GameState.PAUSED;
     }
 
     public void setResumeGame() {
-        pauseGame = false;
+        gameState = GameState.IS_RUNNING;
     }
 
-    private void guessNumber() {
+    public void guessNumber() {
         System.out.println("Введи любое число от 0 до " + maxNumber);
         while (true) {
             try {
@@ -117,7 +104,7 @@ public class Game {
                     System.out.println("Правильно!");
                     System.out.println(userName + " угадал число c " + count + " раза!");
                     tryToGuess = tryToGuess + 1;
-                    addStatistics();
+//                    playerStatistics.addResult(userName, count, tryToGuess);
                     count++;
                     break;
                 }
@@ -128,28 +115,23 @@ public class Game {
         }
     }
 
-    private void addStatistics() {
-        score.add("Попытка №" + tryToGuess + ":" + "Пользователь"  + "[" + userName + "]" + ":" + "Угадал цифру" + "[" + randomNumber + "]" + " c " + count + " раз(а);");
-    }
-
-    private void setRandomNumber() {
+    public void setRandomNumber() {
         randomNumber = (int) (Math.random() * (maxNumber + 1));
     }
 
-    private void setNumber() {
+    public void setNumber() {
         System.out.println("Привет! Это игра угадай число! Введи максимальное число которое я могу загадать:");
         while (true) {
             try {
                 while (true) {
                     maxNumber = input.nextInt();
-                    if (maxNumber > 0){
+                    if (maxNumber > 0) {
                         input.nextLine();
                         break;
-                    } else if (maxNumber < 0){
+                    } else if (maxNumber < 0) {
                         System.out.println("Число не может быть отрицательным!");
                         input.nextLine();
-                    }
-                    else if (maxNumber == 0){
+                    } else if (maxNumber == 0) {
                         System.out.println("Слишком просто! Хитрец :)");
                         input.nextLine();
                     }
@@ -162,8 +144,5 @@ public class Game {
             }
         }
     }
-
-
-
 }
 
