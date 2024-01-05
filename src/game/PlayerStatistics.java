@@ -1,7 +1,6 @@
 package game;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -33,7 +32,7 @@ public class PlayerStatistics {
 
 
     private void saveResult(List<Statistics> statistics) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(STATISTICS_BIN))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(STATISTICS_BIN))) {
             oos.writeObject(statistics);
         } catch (IOException e) {
             System.out.println("Проверт наличие файла или структуру класса");
@@ -41,8 +40,8 @@ public class PlayerStatistics {
     }
 
     private List<Statistics> getStatisticsPlayers() {
-        try ( ObjectInputStream ois = new ObjectInputStream(new FileInputStream(STATISTICS_BIN))) {
-            List <Statistics> getPlayers = (List<Statistics>) ois.readObject();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(STATISTICS_BIN))) {
+            List<Statistics> getPlayers = (List<Statistics>) ois.readObject();
             return getPlayers;
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Проверт наличие файла или структуру класса");

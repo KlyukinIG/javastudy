@@ -2,8 +2,6 @@ package game;
 
 import game.Exceptions.SetNumberException;
 
-import javax.swing.plaf.nimbus.AbstractRegionPainter;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class NewGame {
@@ -21,7 +19,7 @@ public class NewGame {
     public static void main(String[] args) {
     }
 
-    void startGamez(){
+    void startGamez() {
         do {
             System.out.println("Привет давай поиграем в игру угадай число?(Да/Нет)");
             answer = input.nextLine();
@@ -36,18 +34,17 @@ public class NewGame {
     }
 
 
-    private static void setNumber(){
+    private static void setNumber() {
         System.out.println("Введи максимальное число которое я могу загодать");
         while (true) {
             try {
-                if (!input.hasNextInt()){
+                if (!input.hasNextInt()) {
                     throw new SetNumberException();
                 }
                 int maxNumber = input.nextInt();
                 if (maxNumber <= 0) {
                     throw new SetNumberException();
-                }
-                else {
+                } else {
                     randomNumber = (int) (Math.random() * maxNumber) + 1;
                     break;
                 }
@@ -58,7 +55,7 @@ public class NewGame {
         }
     }
 
-    private static void game(){
+    private static void game() {
         setUserName();
         setNumber();
         while (gameStatus == GameState.IS_RUNNING) {
@@ -74,7 +71,7 @@ public class NewGame {
                 case 0:
                     score++;
                     tryes++;
-                    playerStatistics.addResult(user,score,tryes);
+                    playerStatistics.addResult(user, score, tryes);
                     gotGuessed();
                     break;
                 case 1:
@@ -87,8 +84,7 @@ public class NewGame {
     }
 
 
-
-    private static void gotGuessed(){
+    private static void gotGuessed() {
         System.out.println("Угадал!");
         String askPlayer;
         do {
