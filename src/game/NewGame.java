@@ -59,8 +59,8 @@ public class NewGame {
     }
 
     private static void game(){
-        setNumber();
         setUserName();
+        setNumber();
         while (gameStatus == GameState.IS_RUNNING) {
             System.out.println("Попробуй угадать загаданное число! Введи свой вариант");
             int userNumber = input.nextInt();
@@ -105,7 +105,6 @@ public class NewGame {
     }
 
     private static void setUserName() {
-        input.nextLine();
         System.out.println("Введи свой ник");
         String namePlayer = input.nextLine();
         user = namePlayer;
