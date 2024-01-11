@@ -16,10 +16,8 @@ public class NewGame {
     private static PlayerStatistics playerStatistics = new PlayerStatistics();
 
 
-    public static void main(String[] args) {
-    }
 
-    void startGamez() {
+    public void startGamez() {
         do {
             System.out.println("Привет давай поиграем в игру угадай число?(Да/Нет)");
             answer = input.nextLine();
